@@ -22,3 +22,7 @@ data/kaggle/*.csv
 
 # SO
 .DS_Store
+
+# MLflow (banco local)
+mlflow.db
+mlartifacts/

@@ -1,0 +1,50 @@
+<svg viewBox="0 0 350 470" xmlns="http://www.w3.org/2000/svg" font-family="Courier New, monospace">
+  <rect x="0" y="0" width="350" height="470" fill="#FFFFFF"/>
+  <text x="175" y="20" text-anchor="middle" fill="#48494D" font-size="13" font-weight="bold">ETAPA 3 — O BANDIT APRENDE</text>
+
+  <!-- ciclo -->
+  <text x="175" y="40" text-anchor="middle" fill="#48494D" font-size="10">ciclo que se repete a cada cliente</text>
+
+  <rect x="30" y="48" width="290" height="30" rx="4" fill="#00ACF1"/>
+  <text x="175" y="67" text-anchor="middle" fill="#FFFFFF" font-size="10">1. chega contexto (segmento, canal)</text>
+  <text x="175" y="90" text-anchor="middle" fill="#48494D" font-size="11">▼</text>
+  <rect x="30" y="96" width="290" height="30" rx="4" fill="#EE008B"/>
+  <text x="175" y="115" text-anchor="middle" fill="#FFFFFF" font-size="10">2. escolhe braço (explora ou explota)</text>
+  <text x="175" y="138" text-anchor="middle" fill="#48494D" font-size="11">▼</text>
+  <rect x="30" y="144" width="290" height="30" rx="4" fill="#FFF300"/>
+  <text x="175" y="163" text-anchor="middle" fill="#48494D" font-size="10" font-weight="bold">3. recompensa volta (com atraso!)</text>
+  <text x="175" y="186" text-anchor="middle" fill="#48494D" font-size="11">▼</text>
+  <rect x="30" y="192" width="290" height="30" rx="4" fill="#48494D"/>
+  <text x="175" y="211" text-anchor="middle" fill="#FFFFFF" font-size="10">4. atualiza a crença → volta ao 1</text>
+
+  <!-- explora vs explota -->
+  <line x1="20" y1="236" x2="330" y2="236" stroke="#48494D" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="175" y="252" text-anchor="middle" fill="#48494D" font-size="10" font-weight="bold">o dilema do bandit</text>
+  <rect x="20" y="258" width="150" height="40" rx="4" fill="#FFFFFF" stroke="#00ACF1" stroke-width="1.5"/>
+  <text x="95" y="275" text-anchor="middle" fill="#48494D" font-size="9" font-weight="bold">EXPLORAR</text>
+  <text x="95" y="290" text-anchor="middle" fill="#48494D" font-size="8">testar o incerto</text>
+  <rect x="180" y="258" width="150" height="40" rx="4" fill="#FFFFFF" stroke="#EE008B" stroke-width="1.5"/>
+  <text x="255" y="275" text-anchor="middle" fill="#48494D" font-size="9" font-weight="bold">EXPLOTAR</text>
+  <text x="255" y="290" text-anchor="middle" fill="#48494D" font-size="8">usar o que já funciona</text>
+
+  <!-- resultados -->
+  <text x="175" y="320" text-anchor="middle" fill="#48494D" font-size="10" font-weight="bold">conversão (com atraso de 7 dias)</text>
+  <!-- barras -->
+  <g font-size="9">
+    <text x="20" y="338" fill="#48494D">baseline_best</text>
+    <rect x="150" y="330" width="163" height="10" fill="#9aa0a6"/><text x="318" y="338" fill="#48494D">16,3%</text>
+    <text x="20" y="354" fill="#48494D">thompson_ctx</text>
+    <rect x="150" y="346" width="157" height="10" fill="#EE008B"/><text x="318" y="354" fill="#48494D">15,7%</text>
+    <text x="20" y="370" fill="#48494D">thompson</text>
+    <rect x="150" y="362" width="151" height="10" fill="#00ACF1"/><text x="318" y="370" fill="#48494D">15,1%</text>
+    <text x="20" y="386" fill="#48494D">ucb1</text>
+    <rect x="150" y="378" width="126" height="10" fill="#FFF300"/><text x="318" y="386" fill="#48494D">12,6%</text>
+    <text x="20" y="402" fill="#48494D">baseline_naive</text>
+    <rect x="150" y="394" width="119" height="10" fill="#48494D"/><text x="318" y="402" fill="#48494D">11,9%</text>
+  </g>
+
+  <line x1="20" y1="416" x2="330" y2="416" stroke="#48494D" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="175" y="434" text-anchor="middle" fill="#48494D" font-size="9">sem atraso, thompson_ctx vira 16,4% (vence)</text>
+  <text x="175" y="450" text-anchor="middle" fill="#48494D" font-size="9">o atraso é o que segura o bandit</text>
+  <text x="175" y="464" text-anchor="middle" fill="#48494D" font-size="8">5 políticas · regret · MLflow · 16 testes</text>
+</svg>

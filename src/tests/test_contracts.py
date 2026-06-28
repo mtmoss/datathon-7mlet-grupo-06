@@ -16,18 +16,13 @@ def test_cria_evento_oferta() -> None:
     assert "educacao_financeira" in evento.available_arms
 
 
-def test_baseline_escolhe_primeiro_braco() -> None:
-    from datathon_offerexp.policies import baseline_select
+def test_baseline_fixo_sempre_mesmo_braco() -> None:
+    from datathon_offerexp.policies import FixedArm
 
-    evento = SyntheticOfferEvent(
-        event_id="evt_002",
-        occurred_at="2026-07-01T10:05:00Z",
-        subject_key="sub_002",
-        channel="web",
-        segment="recorrente",
-        available_arms=("simulador_credito", "sem_oferta"),
-    )
-    assert baseline_select(evento) == "simulador_credito"
+    pol = FixedArm("simulador_credito")
+    ctx = {"segment": "recorrente", "channel": "web"}
+    assert pol.select(ctx) == "simulador_credito"
+    assert pol.greedy(ctx) == "simulador_credito"
 
 
 def test_decision_record() -> None:
