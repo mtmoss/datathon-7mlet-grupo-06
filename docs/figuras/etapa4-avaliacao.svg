@@ -1,0 +1,40 @@
+<svg viewBox="0 0 350 460" xmlns="http://www.w3.org/2000/svg" font-family="Courier New, monospace">
+  <rect x="0" y="0" width="350" height="460" fill="#FFFFFF"/>
+  <text x="175" y="20" text-anchor="middle" fill="#48494D" font-size="13" font-weight="bold">ETAPA 4 — PROVAR A QUALIDADE</text>
+  <text x="175" y="37" text-anchor="middle" fill="#48494D" font-size="9">medir antes de servir a decisão</text>
+
+  <!-- golden set -->
+  <rect x="15" y="48" width="320" height="66" rx="4" fill="#00ACF1"/>
+  <text x="25" y="66" fill="#FFFFFF" font-size="11" font-weight="bold">GOLDEN SET — 21 casos (prova)</text>
+  <text x="25" y="82" fill="#FFFFFF" font-size="9">típicos · bordas · por segmento · adversariais</text>
+  <text x="25" y="97" fill="#FFFFFF" font-size="9">cada caso: contexto + resposta esperada + pass/fail</text>
+  <text x="25" y="110" fill="#FFF300" font-size="10" font-weight="bold">aprovação: 90,5%  (2 falhas = limitação de canal)</text>
+
+  <!-- fairness -->
+  <rect x="15" y="122" width="320" height="78" rx="4" fill="#EE008B"/>
+  <text x="25" y="140" fill="#FFFFFF" font-size="11" font-weight="bold">FAIRNESS — exposição por segmento</text>
+  <text x="25" y="156" fill="#FFFFFF" font-size="9">novo       → educacao_financeira  (13,3%)</text>
+  <text x="25" y="170" fill="#FFFFFF" font-size="9">recorrente → simulador_credito   (24,0%)</text>
+  <text x="25" y="184" fill="#FFFFFF" font-size="9">reativado  → oferta_deposito     (89,5%)</text>
+  <text x="25" y="197" fill="#FFF300" font-size="8">nenhum segmento fica sem oferta</text>
+
+  <!-- sensibilidade -->
+  <rect x="15" y="208" width="320" height="74" rx="4" fill="#48494D"/>
+  <text x="25" y="226" fill="#FFFFFF" font-size="11" font-weight="bold">SENSIBILIDADE — é estável?</text>
+  <text x="25" y="242" fill="#FFFFFF" font-size="9">5 seeds: conversão 15,2% ± 0,2  (estável)</text>
+  <text x="25" y="258" fill="#FFFFFF" font-size="9">atraso  0d → 16,4%  |  7d → 15,7%  |  14d → 14,8%</text>
+  <text x="25" y="274" fill="#FFF300" font-size="8">mais atraso = menos conversão, mais regret</text>
+
+  <!-- limitacoes -->
+  <rect x="15" y="290" width="320" height="92" rx="4" fill="#FFFFFF" stroke="#48494D" stroke-width="1.5"/>
+  <text x="25" y="308" fill="#48494D" font-size="11" font-weight="bold">QUANDO NÃO USAR (honestidade)</text>
+  <text x="25" y="325" fill="#48494D" font-size="9">• ignora o canal → erra onde o canal decide</text>
+  <text x="25" y="340" fill="#48494D" font-size="9">• atraso longo encolhe o ganho</text>
+  <text x="25" y="355" fill="#48494D" font-size="9">• segmento pequeno (reativado) = mais variância</text>
+  <text x="25" y="370" fill="#48494D" font-size="9">• decisão sensível exige revisão humana</text>
+
+  <line x1="15" y1="396" x2="335" y2="396" stroke="#48494D" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="175" y="414" text-anchor="middle" fill="#48494D" font-size="9" font-weight="bold">tudo reproduzível por 1 comando</text>
+  <text x="175" y="430" text-anchor="middle" fill="#48494D" font-size="8">offerexp-offline → golden + fairness + sensibilidade</text>
+  <text x="175" y="446" text-anchor="middle" fill="#48494D" font-size="8">2 relatórios + golden set versionado + 20 testes</text>
+</svg>

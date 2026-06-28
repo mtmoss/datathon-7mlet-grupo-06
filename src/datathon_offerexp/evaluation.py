@@ -64,6 +64,8 @@ class SimResult:
     exploration_rate: float
     reward_curve: list[int] = field(default_factory=list)
     regret_curve: list[float] = field(default_factory=list)
+    exposure: dict = field(default_factory=dict)  # arm -> nº de vezes escolhido
+    exposure_seg: dict = field(default_factory=dict)  # (segmento, arm) -> contagem
 
 
 def _context(row: pd.Series) -> dict:
@@ -85,12 +87,13 @@ def run_simulation(
     events: pd.DataFrame,
     seed: int = 123,
     delayed: bool = True,
+    delay_days: int = ATTRIBUTION_DELAY_DAYS,
 ) -> SimResult:
     """Roda uma politica sobre o fluxo de eventos e devolve as metricas."""
     rng = np.random.default_rng(seed)
     events = events.sort_values("occurred_at").reset_index(drop=True)
     times = pd.to_datetime(events["occurred_at"])
-    delay = pd.Timedelta(days=ATTRIBUTION_DELAY_DAYS)
+    delay = pd.Timedelta(days=delay_days)
 
     queue: list[tuple] = []  # heap (arrival_time, ordem, arm, reward, context)
     counter = 0
@@ -99,6 +102,8 @@ def run_simulation(
     explore = 0
     reward_curve: list[int] = []
     regret_curve: list[float] = []
+    exposure: dict = {a: 0 for a in syn.ARMS}
+    exposure_seg: dict = {}
 
     for i, row in events.iterrows():
         now = times[i]
@@ -114,6 +119,9 @@ def run_simulation(
         arm = policy.select(ctx)
         if arm != policy.greedy(ctx):
             explore += 1
+        exposure[arm] += 1
+        key = (ctx["segment"], arm)
+        exposure_seg[key] = exposure_seg.get(key, 0) + 1
 
         # 3. recompensa verdadeira e regret
         reward = int(rng.random() < probs[arm])
@@ -140,6 +148,8 @@ def run_simulation(
         exploration_rate=round(explore / n, 4),
         reward_curve=reward_curve,
         regret_curve=regret_curve,
+        exposure=exposure,
+        exposure_seg=exposure_seg,
     )
 
 
