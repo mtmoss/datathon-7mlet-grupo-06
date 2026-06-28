@@ -3,13 +3,13 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ml-datathon"
+name = "datathon-7mlet-grupo-06"
 version = "0.1.0"
 description = "Plataforma de experimentacao adaptativa (multi-armed bandits) para ofertas financeiras - Datathon MLET7 FIAP."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "Grupo XX - MLET7" }]
+authors = [{ name = "Grupo 06 - MLET7" }]
 dependencies = [
     "numpy>=1.24",
     "pandas>=2.0",

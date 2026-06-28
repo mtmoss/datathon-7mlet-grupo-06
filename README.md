@@ -4,6 +4,8 @@ Plataforma de **experimentação adaptativa** (multi-armed bandits) que decide, 
 cliente elegível, qual oferta apresentar — aprendendo com as recompensas observadas.
 Projeto do Datathon da Fase 5 (MLET7 / FIAP).
 
+Repositório: **`datathon-7mlet-grupo-06`** (Grupo 06 — MLET7).
+
 > Status: esqueleto inicial (Etapa 0). As demais etapas são preenchidas ao longo do projeto.
 
 ## Visão do problema
