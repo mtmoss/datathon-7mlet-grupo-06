@@ -26,3 +26,6 @@ data/kaggle/*.csv
 # MLflow (banco local)
 mlflow.db
 mlartifacts/
+
+# log de decisao (gerado em runtime)
+reports/decision_log.jsonl

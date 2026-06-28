@@ -66,19 +66,38 @@ pytest
 # 5. lint
 ruff check src
 
-# 6. API (depois do Dia 5)
-uvicorn datathon_offerexp.app:app --reload
-# abra http://localhost:8000/health
+# 4. pipeline ponta a ponta (dados -> bandits -> avaliação -> política treinada)
+make pipeline
+
+# 5. testes e lint
+make test
+make lint
+
+# 6. sobe a API de decisão
+make serve
+# em outro terminal, um exemplo de decisão:
+make decide
+# ou abra a doc interativa em http://localhost:8000/docs
 ```
 
 ## Comandos principais
 
 | Comando | O que faz |
 |---|---|
-| `pytest` | roda os testes |
-| `ruff check src` | verifica estilo do código |
-| `offerexp-eval` | avaliação offline (Dia 4) |
-| `uvicorn datathon_offerexp.app:app --reload` | sobe a API |
+| `make pipeline` | roda o fluxo ponta a ponta (1 comando) |
+| `make serve` | sobe a API de decisão (porta 8000) |
+| `make decide` | exemplo de chamada à API |
+| `make test` / `pytest` | roda os testes |
+| `make lint` | verifica estilo do código |
+
+Contrato completo da API em [`docs/api-contract.md`](docs/api-contract.md).
+
+## Como funciona a decisão
+
+`POST /decide` recebe um contexto (segmento, canal, propensão) e devolve a oferta
+escolhida pela política, com `reason_codes` (justificativa), `policy_version` e um
+registro auditável gravado em `reports/decision_log.jsonl`. A política é carregada
+de um artefato versionado (`models/policy-v1.json`), treinado fora do serviço.
 
 ## Limitações
 

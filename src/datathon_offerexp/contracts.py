@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 # Os "bracos" sao as acoes possiveis (cada oferta e um braco do bandit).
-Arm = Literal["sem_oferta", "educacao_financeira", "simulador_credito"]
+Arm = Literal["sem_oferta", "educacao_financeira", "simulador_credito", "oferta_deposito"]
 Channel = Literal["app", "web", "email"]
 Segment = Literal["novo", "recorrente", "reativado"]
 PolicyMode = Literal["baseline", "adaptive"]

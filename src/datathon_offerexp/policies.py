@@ -79,6 +79,20 @@ class ThompsonSampling(Policy):
         means = {a: self.alpha[a] / (self.alpha[a] + self.beta[a]) for a in self.arms}
         return max(means, key=means.get)
 
+    def estimated_mean(self, arm: str) -> float:
+        """Estimativa atual de conversao do braco (media da Beta)."""
+        return self.alpha[arm] / (self.alpha[arm] + self.beta[arm])
+
+    def export(self) -> dict[str, list[float]]:
+        """Serializa o estado aprendido (alpha, beta por braco)."""
+        return {a: [self.alpha[a], self.beta[a]] for a in self.arms}
+
+    def load(self, state: dict[str, list[float]]) -> None:
+        """Carrega um estado salvo."""
+        for a, (al, be) in state.items():
+            self.alpha[a] = float(al)
+            self.beta[a] = float(be)
+
 
 class UCB1(Policy):
     """Upper Confidence Bound (referencia da familia Nilos-UCB)."""
@@ -136,3 +150,20 @@ class ContextualThompson(Policy):
 
     def greedy(self, context: dict) -> str:
         return self._model(context).greedy(context)
+
+    def best_among(self, context: dict, available: list[str]) -> str:
+        """Melhor braco estimado entre os disponiveis (respeita elegibilidade)."""
+        model = self._model(context)
+        return max(available, key=model.estimated_mean)
+
+    def estimated_mean(self, context: dict, arm: str) -> float:
+        return self._model(context).estimated_mean(arm)
+
+    def export(self) -> dict[str, dict]:
+        """Serializa o estado de todos os segmentos."""
+        return {seg: m.export() for seg, m in self.models.items()}
+
+    def load(self, state: dict[str, dict]) -> None:
+        for seg, st in state.items():
+            if seg in self.models:
+                self.models[seg].load(st)
