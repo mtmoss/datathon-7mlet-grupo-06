@@ -10,7 +10,7 @@ Legenda da coluna "Natureza":
 - **Escolha dentro do exigido**: a banca pede a categoria, mas a opção foi minha.
 - **Escolha livre**: a banca não pede; incluí por boa prática ou para antecipar etapas.
 
-> Última atualização: **Etapa 7**. Atualizado a cada etapa nova.
+> Última atualização: **Etapa 8** (final). Atualizado a cada etapa nova.
 
 ---
 
@@ -127,6 +127,17 @@ Legenda da coluna "Natureza":
 | Drift | **PSI** (Population Stability Index) | KS-test, Evidently | Simples, interpretável, limiar claro (>0,2) | Escolha dentro do exigido |
 | Demonstração | v2 promovido (+1,8pp) e v3 rejeitado | só um caso | Mostrar o gate promovendo E protegendo | Escolha livre |
 | Tracking resiliente | falha de MLflow não derruba o ciclo | deixar quebrar | Robustez operacional | Escolha livre |
+
+## Etapa 8 — Governança, assistente e pitch
+
+| Decisão | O que escolhi | Alternativa | Racional | Natureza |
+|---|---|---|---|---|
+| Recuperação do RAG | TF-IDF (scikit-learn) | busca vetorial (embeddings) | Sem dependência pesada; corpus pequeno | Escolha dentro do exigido |
+| LLM do assistente | Claude (dev) / Azure AI Foundry (produção) | só Azure | Claude p/ desenvolver; Azure no alvo | Exigido (assistente); modelo = escolha |
+| Modo sem chave | responde só com recuperação | exigir chave sempre | Demo e testes rodam sem `ANTHROPIC_API_KEY` | Escolha livre |
+| Guardrails | entrada (injeção/conselho) + saída (PII) | sem guardrail | Exigido tratar abuso do assistente e PII | Exigido |
+| Relatório técnico | Markdown (exportável a PDF) | só PDF | Versionável e fácil de editar | Escolha dentro do exigido |
+| Pitch | roteiro slide a slide em Markdown | só .pptx | Conteúdo primeiro; deck gerado a partir dele | Escolha dentro do exigido |
 
 ## Decisões transversais
 
