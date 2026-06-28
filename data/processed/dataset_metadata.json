@@ -1,0 +1,14 @@
+{
+  "name": "Bank Marketing (bank-additional-full)",
+  "source_kaggle": "https://www.kaggle.com/datasets/henriqueyamahata/bank-marketing",
+  "source_original": "http://archive.ics.uci.edu/ml/datasets/Bank+Marketing",
+  "citation": "Moro, Cortez & Rita (2014), Decision Support Systems",
+  "license": "CC BY 4.0 (uso para pesquisa, com citacao)",
+  "version": "bank-additional-full.csv (41188 registros, mai/2008-nov/2010)",
+  "separator": ";",
+  "leakage_columns_dropped": [
+    "duration"
+  ],
+  "n_rows": 41188,
+  "n_cols": 20
+}
