@@ -1,79 +1,61 @@
-# Pitch Demo Day — OfferExp (até 10 min + 5 de perguntas)
+# Roteiro do Vídeo Pitch (até 5 minutos)
 
-Roteiro slide a slide, com tempo e fala-chave. Os slides devem ser versionados no
-repositório em PDF ou formato aberto. Distribuição de papéis: solo (autora).
+O enunciado pede um **vídeo de até 5 min** que explique o problema de negócio, qual
+modelo foi usado e **mostre a Etapa 5 rodando** (o modelo gerando uma recomendação).
+Não precisa de dezenas de slides — o centro é a **demonstração**.
 
-## Estrutura e tempo (10 min)
+Prepare antes de gravar:
 
-| # | Slide | Tempo | Mensagem-chave |
-|---|---|---:|---|
-| 1 | Capa | 0:30 | Plataforma que aprende sozinha qual oferta mostrar |
-| 2 | Problema | 1:00 | Regra fixa e A/B desperdiçam tráfego e demoram a reagir |
-| 3 | Abordagem | 1:00 | Multi-armed bandit: decide e aprende a cada recompensa |
-| 4 | Dados | 1:00 | Base Kaggle real + camada sintética; sem vazamento |
-| 5 | Resultados | 1:30 | Bandit vence baseline ingênuo; honesto sobre limites |
-| 6 | Demo ao vivo | 2:00 | API decide + log + assistente explica |
-| 7 | Ciclo MLOps | 1:00 | Champion-challenger, aprovação humana, rollback |
-| 8 | Arquitetura Azure + FinOps | 1:00 | Só Azure; custo e escala |
-| 9 | Riscos e governança | 0:30 | Cards, LGPD, guardrails |
-| 10 | Impacto e fecho | 0:30 | ROI da personalização responsável |
+```bash
+cd datathon-7mlet-grupo-06 && source .venv/bin/activate
+make pipeline        # garante dados + política treinada
+make serve           # deixe a API no ar (um terminal)
+```
 
-## Falas por slide
+## Roteiro (5 min)
 
-**1. Capa.** "OfferExp: uma plataforma que decide, sozinha, qual oferta apresentar
-a cada cliente — e aprende a cada resposta."
+| Tempo | O que falar | O que mostrar na tela |
+|---|---|---|
+| 0:00–0:40 | **Problema.** Um banco digital precisa escolher qual oferta mostrar a cada cliente. Regra fixa e teste A/B desperdiçam tráfego e demoram a reagir. | 1 slide simples com o problema |
+| 0:40–1:20 | **Abordagem.** Usamos um multi-armed bandit: ele testa ofertas e aprende com a resposta, equilibrando explorar e explotar. Comparamos com um baseline de regra fixa. | 1 slide: baseline vs bandit |
+| 1:20–2:00 | **Dados.** Base real Bank Marketing (Kaggle) como contexto; a recompensa é sintética e **calibrada no `y` real**. Descartamos `duration` (vazamento). Somos honestos: não é uplift de produção. | notebook de EDA / tabela de dados |
+| 2:00–3:40 | **DEMO (Etapa 5).** Mostrar a API decidindo ao vivo: 3 clientes, 3 recomendações diferentes por segmento, com a justificativa (reason codes) e o log auditável. | terminal: `make decide` + 2 chamadas `curl`; abrir `reports/decision_log.jsonl` |
+| 3:40–4:20 | **Resultados + MLflow.** O bandit supera o baseline (11,9% → 15,7%). Experimentos rastreados no MLflow. | `mlflow ui` (opcional) ou a tabela do README |
+| 4:20–5:00 | **Governança e fecho.** Guardrails (não oferta direta a cliente novo), humano no loop, nuvem AWS. Impacto: mais conversão, menos desperdício, de forma responsável. | 1 slide de fecho |
 
-**2. Problema.** Regras fixas não personalizam; testes A/B longos desperdiçam
-tráfego e demoram a reagir. Exemplo: cliente começa a usar cartão em farmácia — não
-é doença, é um filho recém-nascido. O sistema precisa testar hipóteses, não chutar.
+## Comandos da demo (para o trecho 2:00–3:40)
 
-**3. Abordagem.** Multi-armed bandit equilibra explorar (testar o incerto) e
-explotar (usar o que funciona). Implementamos Thompson Sampling contextual e UCB1
-(Nilos-UCB), comparados a baselines.
+```bash
+# cliente novo -> educação financeira
+curl -s -X POST localhost:8000/decide -H "Content-Type: application/json" \
+  -d '{"segment":"novo","channel":"app","base_propensity":0.10}'
 
-**4. Dados.** Base Bank Marketing (real) como contexto; camada sintética de ofertas,
-eventos e recompensas com atraso. Descartamos `duration` (vazamento). Tudo
-versionado e documentado.
+# cliente recorrente -> simulador de crédito
+curl -s -X POST localhost:8000/decide -H "Content-Type: application/json" \
+  -d '{"segment":"recorrente","channel":"web","base_propensity":0.20}'
 
-**5. Resultados.** Bandit vence o baseline ingênuo (11,9% → 15,7%). Sem atraso,
-supera até o baseline forte (16,4% vs 16,3%). Somos honestos: o atraso de 7 dias é
-o limitador, e mostramos isso com números.
+# cliente reativado -> oferta de depósito
+curl -s -X POST localhost:8000/decide -H "Content-Type: application/json" \
+  -d '{"segment":"reativado","channel":"app","base_propensity":0.35}'
 
-**6. Demo ao vivo.** `make serve` + 3 chamadas: novo→educação, recorrente→simulador,
-reativado→oferta. Mostrar o log auditável e o assistente explicando a decisão.
-*Plano de contingência: gravação da demo + `decision_log.jsonl` de exemplo no repo.*
+# mostrar o log auditável gerado
+tail -n 3 reports/decision_log.jsonl
+```
 
-**7. Ciclo MLOps.** `make retrain`: challenger v2 promovido (+1,8 pp) com aprovação
-humana; v3 rejeitado pelo gate (superajuste). Rollback testado. O gate protege a
-produção.
+## Dicas de gravação
 
-**8. Arquitetura + FinOps.** Só Azure: Container Apps (escala a zero), Blob,
-PostgreSQL, Event Hubs, AI Search + AI Foundry, Key Vault. Custo: Container Apps
-quase zero ocioso; AI Search e PostgreSQL cobram parados; AI Foundry por token.
-Escala: Container Apps e Event Hubs sobem sozinhos. ROI: ganho da personalização
-sobre campanha estática supera o custo incremental.
+- Grave a tela (OBS, QuickTime ou Loom). Fale com calma; 5 min passa rápido.
+- **Ensaie a demo antes** e deixe os comandos prontos num arquivo para colar.
+- **Plano B:** se a API falhar ao vivo, tenha uma gravação da demo pronta e o
+  `decision_log.jsonl` de exemplo já no repositório.
+- O peso maior é a **demo funcionando** (70% técnico) — priorize esse trecho.
 
-**9. Riscos e governança.** Model Card, System Card, LGPD. Guardrails: suitability,
-approval gate, e o assistente recusa injeção e remove PII. Riscos mapeados:
-reward hacking, manipulação de contexto, abuso do assistente.
+## Perguntas prováveis (se houver arguição)
 
-**10. Impacto.** Mais conversão com menos desperdício, de forma responsável e
-auditável — humanos como revisores, não juízes de cada experimento.
-
-## Cobertura dos critérios de apresentação
-
-- **FinOps (ROI, custo, TCO):** slide 8 — custo qualitativo por serviço, o que
-  cobra ocioso, ROI vs campanha estática, TCO (dev + operação + observabilidade +
-  retreino + governança).
-- **Arquitetura técnica:** slides 6–8 — diagrama, fronteiras de componentes,
-  alternativas descartadas (AKS, Cosmos, Azure ML).
-- **Escala e redução:** slide 8 — o que escala sozinho, o que é manual, o que cobra
-  ocioso, sob baixa e alta carga.
-
-## Perguntas prováveis (5 min)
-
-- "Por que o bandit não vence o baseline forte com atraso?" → contexto dominado por
-  um segmento + atraso; sem atraso ele vence. Honestidade > marketing.
-- "Como evita discriminar?" → não usa atributos protegidos; monitora fairness.
+- "Por que essa base / esse algoritmo?" → `docs/decisoes-de-design.md`.
+- "O bandit sempre vence?" → vence o baseline ingênuo; sem atraso vence o forte.
+  Honestidade sobre limites.
+- "Como evita discriminar / como escala?" → não usa atributos protegidos; AWS
+  App Runner escala sozinho.
 - "Como uma nova política entra em produção?" → champion-challenger + aprovação
-  humana + rollback (Etapa 7).
+  humana + rollback (`make retrain`).

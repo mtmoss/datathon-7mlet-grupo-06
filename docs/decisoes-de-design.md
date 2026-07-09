@@ -92,7 +92,7 @@ Legenda da coluna "Natureza":
 
 | Decisão | O que escolhi | Alternativa | Racional | Natureza |
 |---|---|---|---|---|
-| Meio demonstrável | **API FastAPI** | CLI ou notebook | Mais demonstrável; doc automática; casa com Azure Container Apps | Escolha dentro do exigido |
+| Meio demonstrável | **API FastAPI** | CLI ou notebook | Mais demonstrável; doc automática; casa com AWS App Runner | Escolha dentro do exigido |
 | Política em produção | **artefato versionado** `models/policy-v1.json` (treino offline, API carrega) | treinar dentro da API | Serviço rápido; cria conceito de "versão de política" que a Etapa 7 usa | Escolha livre (antecipa exigência futura) |
 | Validação/erros | pydantic; 422 (tipo) e 400 (regra) | validar à mão | Tratamento de erro exigido; pydantic é o padrão FastAPI | Exigido (tratamento de erro) |
 | Conteúdo dos reason codes | elegível, segmento, canal, maior score, score | outro conjunto | Justificativa exigida; escolhi códigos legíveis | Exigido (reason codes); conteúdo = escolha |
@@ -102,18 +102,18 @@ Legenda da coluna "Natureza":
 
 ---
 
-## Etapa 6 — Arquitetura-alvo Azure
+## Etapa 6 — Arquitetura-alvo AWS
 
 | Decisão | O que escolhi | Alternativa | Racional | Natureza |
 |---|---|---|---|---|
-| Compute | **Azure Container Apps** | AKS / Functions | Roda nosso container, escala a zero, sem complexidade de Kubernetes | Escolha dentro do exigido |
-| MLflow | self-hosted + PostgreSQL | Azure Machine Learning | Mais leve/barato para o escopo | Escolha livre |
-| Banco | PostgreSQL (Burstable) | Cosmos DB / Azure SQL | Backend do MLflow; simples e barato | Escolha dentro do exigido |
-| Eventos | Event Hubs | Service Bus | Ingestão de impressões/recompensas em fluxo | Escolha dentro do exigido |
-| LLM em produção | Azure AI Foundry | manter Claude na nuvem | Exigência: arquitetura só Azure (Claude fica no dev) | Exigido (só Azure) |
-| Entrada | API Management | expor o Container App direto | Auth, rate limit e versão num ponto só | Escolha livre |
-| Segredos | Key Vault + Managed Identity | variáveis de ambiente | Exigido usar Key Vault + Managed Identity | Exigido |
-| Region | brazilsouth (exemplo) | outra region | Latência/LGPD no Brasil | Escolha livre |
+| Compute | **AWS App Runner** | EKS / Lambda | Roda nosso container, autoscaling, sem complexidade de Kubernetes | Escolha dentro do exigido |
+| MLflow | self-hosted + RDS | SageMaker | Mais leve/barato para o escopo | Escolha livre |
+| Banco | RDS PostgreSQL (t3.micro) | DynamoDB | Backend do MLflow espera SQL; simples e barato | Escolha dentro do exigido |
+| Eventos | Kinesis Data Streams | SQS | Ingestão de impressões/recompensas em fluxo | Escolha dentro do exigido |
+| LLM em produção | Amazon Bedrock (Claude) | outro provedor | Bedrock hospeda o **mesmo Claude** do dev — sem troca de modelo | Escolha dentro do exigido |
+| Entrada | API Gateway | expor o App Runner direto | Auth, rate limit e versão num ponto só | Escolha livre |
+| Segredos | Secrets Manager + IAM Role | variáveis de ambiente | Segredo fora do código; acesso por role | Escolha dentro do exigido |
+| Region | sa-east-1 (São Paulo) | outra region | Latência/LGPD no Brasil | Escolha livre |
 
 ## Etapa 7 — Ciclo de vida MLOps
 
@@ -133,7 +133,7 @@ Legenda da coluna "Natureza":
 | Decisão | O que escolhi | Alternativa | Racional | Natureza |
 |---|---|---|---|---|
 | Recuperação do RAG | TF-IDF (scikit-learn) | busca vetorial (embeddings) | Sem dependência pesada; corpus pequeno | Escolha dentro do exigido |
-| LLM do assistente | Claude (dev) / Azure AI Foundry (produção) | só Azure | Claude p/ desenvolver; Azure no alvo | Exigido (assistente); modelo = escolha |
+| LLM do assistente | Claude (dev e produção via Amazon Bedrock) | outro provedor | Mesmo modelo no dev e na AWS (Bedrock) | Exigido (assistente); modelo = escolha |
 | Modo sem chave | responde só com recuperação | exigir chave sempre | Demo e testes rodam sem `ANTHROPIC_API_KEY` | Escolha livre |
 | Guardrails | entrada (injeção/conselho) + saída (PII) | sem guardrail | Exigido tratar abuso do assistente e PII | Exigido |
 | Relatório técnico | Markdown (exportável a PDF) | só PDF | Versionável e fácil de editar | Escolha dentro do exigido |

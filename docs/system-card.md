@@ -19,9 +19,9 @@ com humano no loop. Não executa ofertas reais.
 ## Dependências
 
 - Internas: `policies`, `policy_store`, `lifecycle`, `evaluation`, `assistant`.
-- Tracking: MLflow (SQLite local / PostgreSQL no Azure).
-- LLM: Claude (Anthropic) no desenvolvimento; Azure AI Foundry no alvo de produção.
-- Alvo de nuvem: Azure (ver `docs/architecture-azure.md`).
+- Tracking: MLflow (SQLite local / RDS PostgreSQL na AWS).
+- LLM: Claude (Anthropic) no dev; Amazon Bedrock (mesmo Claude) em produção.
+- Alvo de nuvem: AWS (ver `docs/architecture-aws.md`).
 
 ## Guardrails
 
@@ -49,7 +49,7 @@ com humano no loop. Não executa ofertas reais.
 
 - Drift (PSI > 0,2) em contexto e recompensa → gatilho de retreino.
 - Conversão, regret, exploração e fairness de exposição.
-- Latência, disponibilidade e custo (Azure Monitor / App Insights).
+- Latência, disponibilidade e custo (Amazon CloudWatch).
 - Uso do assistente (tokens, recusas, latência).
 
 ## Plano de revisão periódica

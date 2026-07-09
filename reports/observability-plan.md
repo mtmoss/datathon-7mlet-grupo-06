@@ -1,8 +1,8 @@
 # Plano de Observabilidade (Etapa 7)
 
 O que monitorar para saber quando a política está degradando e quando retreinar.
-Código de drift: `src/datathon_offerexp/drift.py`. No Azure, surfaceado em Azure
-Monitor + Application Insights (ver `docs/architecture-azure.md`).
+Código de drift: `src/datathon_offerexp/drift.py`. Na AWS, surfaceado em Amazon
+CloudWatch + X-Ray (ver `docs/architecture-aws.md`).
 
 ## 1. Drift de dados (PSI)
 
@@ -39,11 +39,11 @@ Monitorar drift em: contexto (segmento, canal, propensão) e na **recompensa**
 | Taxa de exploração | saúde do bandit | exploração ~0 (parou de aprender) ou alta demais |
 | Fairness de exposição | um segmento sem oferta | desvio entre segmentos |
 
-## 3. Observabilidade operacional (Azure)
+## 3. Observabilidade operacional (AWS)
 
-- **Latência e disponibilidade** da API → Application Insights.
-- **Custo** por serviço → Azure Monitor (alerta de custo).
-- **Logs de decisão** → Log Analytics (consultas de auditoria).
+- **Latência e disponibilidade** da API → CloudWatch + X-Ray.
+- **Custo** por serviço → AWS Cost Explorer / CloudWatch (alerta de custo).
+- **Logs de decisão** → CloudWatch Logs (consultas de auditoria).
 - **Uso do assistente LLM** → tokens e latência.
 
 ## 4. O que dispara retreino

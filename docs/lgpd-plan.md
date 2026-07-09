@@ -48,12 +48,12 @@ dados pessoais se operasse em produção.
 ## Resposta a incidentes
 
 1. Detecção (alertas de acesso indevido, vazamento, anomalia).
-2. Contenção (revogar credenciais via Key Vault, isolar serviço).
+2. Contenção (revogar credenciais via Secrets Manager, isolar serviço).
 3. Avaliação de impacto e notificação conforme a LGPD, se aplicável.
 4. Correção e registro de lições aprendidas.
 
 ## Segurança (apoio)
 
-- Segredos no **Azure Key Vault**; acesso por **Managed Identity** (sem senha).
+- Segredos no **AWS Secrets Manager**; acesso por **IAM Role** (sem senha).
 - RBAC com menor privilégio; criptografia em repouso e em trânsito.
 - Humano no loop para decisões sensíveis.

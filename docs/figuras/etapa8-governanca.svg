@@ -46,7 +46,7 @@
     <text x="25" y="360">3 · baselines + Thompson + UCB1 + MLflow</text>
     <text x="25" y="374">4 · avaliação offline + fairness + sensibilidade</text>
     <text x="25" y="388">5 · API + log auditável + pipeline</text>
-    <text x="25" y="402">6 · arquitetura-alvo Azure</text>
+    <text x="25" y="402">6 · arquitetura-alvo AWS</text>
     <text x="25" y="416">7 · champion-challenger + aprovação + rollback</text>
     <text x="25" y="430">8 · governança + assistente + relatório + pitch</text>
   </g>

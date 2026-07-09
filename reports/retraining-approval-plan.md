@@ -34,7 +34,7 @@ controlada. Código: `src/datathon_offerexp/lifecycle.py`. Reproduzível:
 ## Rollback
 
 - O registro guarda a versão anterior. `rollback()` volta a champion para ela.
-- No Azure, o Container Apps também mantém revisões (rollback de imagem).
+- Na AWS, o App Runner também mantém versões (rollback de imagem).
 
 ## Demonstração real (executada)
 

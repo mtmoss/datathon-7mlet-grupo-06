@@ -74,13 +74,13 @@ versão da política e `decision_id`. Toda decisão é gravada em log auditável
 Contrato e tratamento de erro em `docs/api-contract.md`. A política é carregada de
 um artefato versionado (`models/policy-vN.json`), treinado fora do serviço.
 
-## 7. Arquitetura-alvo Azure
+## 7. Arquitetura-alvo AWS
 
-Exclusivamente Azure (ver `docs/architecture-azure.md`): Container Apps (API e
-jobs), Blob/Data Lake (dados/artefatos/logs), PostgreSQL (MLflow), Event Hubs
-(eventos), Azure AI Search + AI Foundry (assistente RAG), Azure Monitor/App
-Insights (observabilidade), Entra ID + Managed Identity + Key Vault + RBAC
-(segurança). Escolha guiada por simplicidade e custo baixo ocioso.
+Em AWS (ver `docs/architecture-aws.md`): App Runner (API e jobs), S3
+(dados/artefatos/logs), RDS PostgreSQL (MLflow), Kinesis (eventos), Amazon
+OpenSearch + Amazon Bedrock (assistente RAG — Claude roda nativo), CloudWatch +
+X-Ray (observabilidade), IAM + Cognito + Secrets Manager + KMS (segurança).
+Escolha guiada por simplicidade e custo baixo ocioso.
 
 ## 8. Ciclo MLOps
 
@@ -95,7 +95,7 @@ via PSI (> 0,2 dispara retreino). Rastreio no MLflow. Detalhe em
 
 Assistente com Claude (Anthropic) que explica decisões e recupera políticas
 sintéticas por busca TF-IDF, com guardrails de entrada (injeção/conselho
-financeiro) e saída (PII). Em produção, o modelo seria o Azure AI Foundry.
+financeiro) e saída (PII). Em produção, o modelo roda no Amazon Bedrock (mesmo Claude).
 
 ## 10. Governança
 
@@ -115,8 +115,8 @@ com mitigação e plano de revisão periódica dos cards.
 
 - Política contextual completa (LinUCB) usando canal e propensão.
 - Off-policy evaluation (IPS/DR) além do replay simulado.
-- RAG com busca vetorial (Azure AI Search) e avaliação (RAGAS).
-- Deploy real em Azure com CI/CD de promoção.
+- RAG com busca vetorial (Amazon OpenSearch) e avaliação (RAGAS).
+- Deploy real em AWS com CI/CD de promoção.
 
 ## 13. Referências
 
