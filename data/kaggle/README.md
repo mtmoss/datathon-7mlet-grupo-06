@@ -6,7 +6,7 @@ Base factual do projeto. Não é editada; transformações geram `data/processed
 
 - **Base escolhida:** Bank Marketing (arquivo `bank-additional-full.csv`).
 - **Link Kaggle:** https://www.kaggle.com/datasets/henriqueyamahata/bank-marketing
-- **Origem original (UCI):** http://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+- **Origem (UCI):** http://archive.ics.uci.edu/ml/datasets/Bank+Marketing
 - **Versão usada:** `bank-additional-full.csv` — 41.188 registros, ordenados por data (mai/2008 a nov/2010).
 - **Citação obrigatória:** Moro, S., Cortez, P., & Rita, P. (2014). *A Data-Driven Approach to Predict the Success of Bank Telemarketing.* Decision Support Systems. doi:10.1016/j.dss.2014.03.001
 - **Licença:** disponível publicamente para pesquisa, mediante citação (CC BY 4.0).
@@ -46,7 +46,7 @@ adaptativa (bandits).
 19 variáveis de entrada (dados do cliente, último contato e contexto socioeconômico) + alvo.
 Detalhe completo em `docs/data-dictionary.md`.
 
-## Coluna descartada (vazamento temporal)
+## Coluna descartada (data leakage temporal)
 
 - **`duration`** (duração da ligação, em segundos): **descartada**.
   - Só é conhecida **depois** do contato. O próprio dataset alerta: se `duration=0` então
@@ -57,8 +57,7 @@ Detalhe completo em `docs/data-dictionary.md`.
 ## Limitações e vieses conhecidos
 
 - **Desbalanceamento:** só 11,3% de conversão — exige métricas além de acurácia.
-- **Valores `unknown`:** várias categóricas têm a classe `unknown` (ver relatório de qualidade);
-  tratadas como classe própria, não imputadas.
+- **Valores `unknown`:** várias categorias têm a classe `unknown` (ver relatório de qualidade); tratadas como classe própria.
 - **`pdays=999`:** 96,3% dos clientes nunca foram contatados antes — variável quase constante.
 - **Período fixo (2008–2010):** contexto macroeconômico específico (crise); limita generalização.
 - **Sem identificador de cliente:** não dá para rastrear o mesmo cliente entre registros.
