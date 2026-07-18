@@ -32,3 +32,4 @@ reports/decision_log.jsonl
 
 # artefatos de modelo (regenerados por make pipeline / lifecycle)
 models/
+reports/

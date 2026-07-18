@@ -1,3 +1,41 @@
+#!/usr/bin/env bash
+# Enxuga o repo para o escopo OFICIAL do Datathon (Fase 5).
+# Cria a branch 'slim/escopo-oficial', aplica os cortes e commita.
+# Voce revisa e faz merge SO se aprovar. Nada e perdido: a 'main' fica intacta.
+#
+# Uso:
+#   1. abra o Terminal
+#   2. cd "/Users/mtmoss/MT Claude/datathon-7mlet-grupo-06"
+#   3. bash enxugar.sh
+set -euo pipefail
+
+echo ">> Enxugando o repo para o escopo oficial..."
+
+# 0. checagens de seguranca
+[ -d .git ] || { echo "ERRO: rode dentro da pasta do repositorio (a que tem a .git)."; exit 1; }
+rm -f .git/index.lock 2>/dev/null || true
+
+# 1. base limpa + branch nova (idempotente: pode rodar de novo)
+git switch main
+git branch -D slim/escopo-oficial 2>/dev/null || true
+git switch -c slim/escopo-oficial
+
+# 2. remover pastas e arquivos FORA do escopo oficial
+#    docs/ infra/ reports/ inteiras (governanca extra do enunciado antigo)
+git rm -rf -q docs infra reports data/synthetic_enrichment/policies
+#    arquivo temporario do mlflow que nem devia estar versionado
+git rm -f -q mlflow.db-journal 2>/dev/null || true
+#    codigo avancado nao pedido: assistente RAG, drift, retreino + seus testes
+git rm -f -q \
+  src/datathon_offerexp/assistant.py \
+  src/datathon_offerexp/drift.py \
+  src/datathon_offerexp/lifecycle.py \
+  src/tests/test_assistant.py \
+  src/tests/test_drift.py \
+  src/tests/test_lifecycle.py
+
+# 3. README novo, consolidado e simples
+cat > README.md <<'EOF_README'
 # Datathon 7-MLET — Experimentação Adaptativa em Ofertas
 
 Plataforma simples que decide, para cada cliente, **qual oferta apresentar** — e
@@ -106,3 +144,37 @@ src/datathon_offerexp/  base, políticas, avaliação, API, log de decisão
 - [x] README com base, parágrafo de nuvem e execução local
 - [x] Tracking no MLflow
 - [ ] Vídeo de até 5 min
+EOF_README
+
+# 4. pyproject.toml sem a dependencia 'anthropic' (era so do assistente)
+grep -v 'anthropic' pyproject.toml > pyproject.tmp && mv pyproject.tmp pyproject.toml
+
+# 5. Makefile sem os alvos 'retrain' e 'assistant'
+awk 'BEGIN{skip=0}
+  /^retrain:/{skip=1}
+  /^assistant:/{skip=1}
+  skip==1 && /^$/{skip=0; next}
+  skip==1{next}
+  {print}' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
+sed 's/ retrain//; s/ assistant//' Makefile > Makefile.tmp && mv Makefile.tmp Makefile
+
+# 6. ignorar saidas geradas em runtime (nao voltam pro repo)
+grep -qxF 'reports/' .gitignore 2>/dev/null || echo 'reports/' >> .gitignore
+grep -qxF 'models/'  .gitignore 2>/dev/null || echo 'models/'  >> .gitignore
+
+# 7. commit na branch
+git add -A
+git commit -q -m "chore: enxuga repo para o escopo oficial do datathon
+
+Remove governanca extra (docs/, infra/, reports/), o assistente RAG,
+drift e retreino (lifecycle). Consolida a doc no README. Mantem EDA,
+baseline, bandit, API, golden set, testes e MLflow."
+
+echo ""
+echo ">> PRONTO. Branch 'slim/escopo-oficial' criada e commitada."
+echo ""
+echo "   Revisar o que mudou:   git diff main..slim/escopo-oficial --stat"
+echo "   Testar (recomendado):  pip install -e '.[dev]' && make test && make pipeline"
+echo ""
+echo "   Se APROVAR:  git switch main && git merge slim/escopo-oficial && git push"
+echo "   Se NAO:      git switch main && git branch -D slim/escopo-oficial   (nada perdido)"

@@ -1,6 +1,6 @@
 # Atalhos do projeto. Uso: make <alvo>
 
-.PHONY: install pipeline retrain serve assistant examples test lint decide clean
+.PHONY: install pipeline serve examples test lint decide clean
 
 install:        ## instala o pacote e ferramentas de dev
 	pip install -e ".[dev]"
@@ -11,12 +11,6 @@ pipeline:       ## roda o fluxo ponta a ponta (dados -> bandits -> avaliacao -> 
 	python -m datathon_offerexp.evaluation
 	python -m datathon_offerexp.offline_eval
 	python -m datathon_offerexp.policy_store
-
-retrain:        ## ciclo MLOps: champion-challenger, aprovacao, promocao e rollback
-	python -m datathon_offerexp.lifecycle
-
-assistant:      ## assistente RAG explica uma decisao de exemplo
-	python -m datathon_offerexp.assistant
 
 examples:       ## 5 casos de teste (Etapa 4): oferta recomendada por cliente
 	python -m datathon_offerexp.examples
