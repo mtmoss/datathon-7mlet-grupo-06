@@ -63,18 +63,21 @@ Detalhe em `docs/algorithmic-strategy.md`.
 
 ## Casos de teste — recomendações (Etapa 4)
 
-A política treinada, para 5 clientes de exemplo:
+5 clientes de exemplo, com a oferta recomendada pela política e se a decisão fez
+sentido. Reproduzível: `make examples` (ou `python -m datathon_offerexp.examples`).
 
 | # | Segmento | Canal | Oferta recomendada | Score | Faz sentido? |
 |---|---|---|---|---:|---|
 | 1 | novo | app | educacao_financeira | 0,14 | Sim — cliente novo responde a conteúdo educativo |
 | 2 | novo | email | educacao_financeira | 0,14 | Sim — mesmo perfil, canal diferente |
-| 3 | recorrente | web | simulador_credito | 0,23 | Sim — quem já interage responde ao simulador |
-| 4 | recorrente | app | simulador_credito | 0,23 | Sim — consistente por segmento |
-| 5 | reativado | app | oferta_deposito | 0,92 | Sim — quem já converteu aceita a oferta direta |
+| 3 | recorrente | web | simulador_credito | 0,23 | Sim — quem já interage engaja com o simulador |
+| 4 | reativado | app | oferta_deposito | 0,92 | Sim — quem já converteu aceita a oferta direta |
+| 5 | reativado | web | oferta_deposito | 0,92 | Sim — mesmo perfil, canal diferente |
 
-Golden set completo (21 casos, com pass/fail) em `data/golden_set/evaluation_cases.jsonl`
-e `reports/offline-evaluation.md`.
+O modelo diferencia a oferta por perfil. O 4º braço, `sem_oferta` (controle), nunca é
+recomendado porque, no modelo de recompensa atual (só conversão), ofertar sempre
+converte mais que não ofertar — o modelo aprendeu a evitá-lo. Golden set completo
+(21 casos, com pass/fail) em `data/golden_set/evaluation_cases.jsonl`.
 
 ## Serviço de decisão (Etapa 5)
 
